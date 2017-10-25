@@ -22,6 +22,8 @@ MatchedTissueList = []
 MatchedSummaryOnlyTissue = {}
 MatchedSummaryNoGenderInfo = {}
 MatchedSummary = {}
+Male = 0
+Female = 0
 
 for line in content:
     if line is None or line == '' or line == '\n':
@@ -34,6 +36,11 @@ for line in content:
     
     MatchedList.append(line)
     gender = matchResult.group('Gender')
+    if gender.lower() == 'male':
+        Male += 1
+    else:
+        Female += 1
+            
     tissue = matchResult.group('Tissue')
     subTissue = matchResult.group('SubTissue')
     
@@ -58,6 +65,9 @@ for line in content:
     else:
         MatchedSummary[gtKey] = 0
         
+GenderResult = 'Male: '+str(Male)+ ' Female: ' + str(Female)
+print(GenderResult)         
+"""       
 with open('OnlyTissueLabelList.csv', 'w') as csvFile:
     wr = csv.writer(csvFile)
-    wr.writerow(MatchedTissueList)
+    wr.writerow(MatchedTissueList)"""
