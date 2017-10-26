@@ -28,8 +28,8 @@ def __loadData(dataFile):
             data.append(row)
     return data
 
-log = open('log.txt', 'w')
-DataList = __loadData('data.csv')
+log = open('SkinDataMatchOthers.txt', 'w')
+DataList = __loadData('gtex_data.csv')
 LabelList = __loadData('label.csv')
 
 log.write('Read Data rows:')
@@ -77,6 +77,10 @@ log.write(str(np.mean(simlarityToAdipose)))
 
 log.write('\n Breast simlarity mean: ')
 log.write(str(np.mean(simlarityToBreast)))
+
+
+log.write('\n Matching: \n')
+log.write(model.predict(np.array(SkinData).astype(np.float)))
 
 
 

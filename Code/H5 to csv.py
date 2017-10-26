@@ -4,23 +4,25 @@ Created on Tue Oct 24 20:08:19 2017
 
 @author: Student
 """
+import h5py
+import csv
 
->>> infile = h5py.File('C:/Downloads/gtex_matrix.h5')
->>> myData = infile["data"]["expression"][0:]
->>> myData[0]
-array([  64625,   91931,    4352, ..., 5141780, 1071715,  285020])
->>> length(myData[0])
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-NameError: name 'length' is not defined
->>> count(myData[0])
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-NameError: name 'count' is not defined
->>> len(myData[0])
-25150
->>> import csv
->>> with open("TheOutputCSV.csv", "wb") as f:
-...     writer = csv.writer(f)
-...     writer.writerows(myData)
-...
+is_label = False
+h5FileName = 'tcga_matrix.h5'
+infile = h5py.File(h5FileName)
+myData = infile["data"]["expression"][0:]
+
+print('lenth of data:')
+print( len(myData) )
+
+print('\n lenth of data element:')
+print( len(myData[0]) )
+print('\n')
+
+with open("tcga_data.csv", "wb") as f:
+    writer = csv.writer(f)
+    if is_label:
+        writer.writerow(myData)
+    else:
+        writer.writerows(myData)
+
