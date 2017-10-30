@@ -20,10 +20,8 @@ def __loadData(dataFile):
     with open(dataFile, 'rt') as csvfile:
         datas = csv.reader(csvfile, delimiter = ',')
         for row in datas:
-            
             if row is None or len(row) == 0:
                 continue
-            
             data.append(row)
     return data
 
