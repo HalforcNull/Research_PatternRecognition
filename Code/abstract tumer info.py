@@ -25,6 +25,10 @@ MatchedSummary = {}
 Male = 0
 Female = 0
 
+OutputGenderTissue = []
+OutputNoGenderTissueIncludeSub = []
+OutputAll = []
+
 for line in content:
     if line is None or line == '' or line == '\n':
         continue
@@ -45,6 +49,16 @@ for line in content:
     subTissue = matchResult.group('SubTissue')
     
     MatchedTissueList.append(tissue)
+    OutputGenderTissue.append(gender + '_' + tissue)
+    if subTissue == '':
+        OutputNoGenderTissueIncludeSub.append(tissue)
+    else:
+        OutputNoGenderTissueIncludeSub.append(tissue+'.'+subTissue)
+        
+    if subTissue == '':
+        OutputAll.append(gender + '_' + tissue)
+    else:
+        OutputAll.append(gender + '_' + tissue+'.'+subTissue)
     
     if tissue in MatchedSummaryOnlyTissue.keys():
         MatchedSummaryOnlyTissue[tissue] += 1
@@ -71,3 +85,17 @@ print(GenderResult)
 with open('OnlyTissueLabelList.csv', 'w') as csvFile:
     wr = csv.writer(csvFile)
     wr.writerow(MatchedTissueList)"""
+with open('OutputGenderTissue.csv', 'w') as csvFile:
+    wr = csv.writer(csvFile)
+    wr.writerow(OutputGenderTissue)
+    
+with open('OutputNoGenderTissueIncludeSub.csv', 'w') as csvFile:
+    wr = csv.writer(csvFile)
+    wr.writerow(OutputNoGenderTissueIncludeSub)
+    
+with open('OutputAll.csv', 'w') as csvFile:
+    wr = csv.writer(csvFile)
+    wr.writerow(OutputAll)
+
+
+
