@@ -26,7 +26,7 @@ meanList = np.mean(np.array(DataList).astype(np.float))
 
 with open('stat-mean.csv', 'w') as csvFile:
     wr = csv.writer(csvFile)
-    wr.writerow(meanList)
+    wr.write(meanList)
     
 with open('stat-total.csv', 'w') as csvFile:
     wr = csv.writer(csvFile)
