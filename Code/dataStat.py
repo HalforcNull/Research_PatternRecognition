@@ -28,5 +28,6 @@ with open('stat-mean.csv', 'w') as csvFile:
     wr = csv.writer(csvFile)
     wr.writerow(meanList)
     
-
-
+with open('stat-total.csv', 'w') as csvFile:
+    wr = csv.writer(csvFile)
+    wr.writerow(sumList)
