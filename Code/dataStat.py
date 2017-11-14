@@ -20,7 +20,7 @@ log = open('log-stat.txt', 'w')
 DataList = __loadData('gtex_data.csv')
 LabelList = __loadData('label.csv')
 
-sumList = np.sum(np.array(DataList).astype(np.float), axis=1)
+sumList = np.sum(np.array(DataList).astype(np.float), axis=0)
 
 meanList_0 = np.mean(np.array(DataList).astype(np.float), axis=0)
 meanList_1 = np.mean(np.array(DataList).astype(np.float), axis=1)
