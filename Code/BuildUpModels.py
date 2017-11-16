@@ -16,6 +16,12 @@ def __loadData(dataFile):
             data.append(row)
     return data
 
+def normalization(sample):
+    """one sample pass in"""
+    sample = sample + 100
+    # 2^20 = 1048576
+    return np.log2(sample * 1048576/np.sum(sample))
+
 log = open('log.txt', 'w')
 DataList = __loadData('gtex_data.csv')
 LabelList = __loadData('label.csv')
@@ -35,22 +41,25 @@ log.write('Data Load Finished.')
 
 labels = DataSet.keys()
 
-ThreeLabels = itertools.combinations(labels, 3)
+TwoLabels = itertools.combinations(labels, 2)
 
-for labels in ThreeLabels:
+for labels in TwoLabels:
     lb1 = labels[0]
     lb2 = labels[1]
-    lb3 = labels[2]
-    log.write('building pickle for: ' + lb1 + ' ' + lb2 + ' ' + lb3)
-    Data = DataSet[lb1] + DataSet[lb2] + DataSet[lb3]
-    Label = [lb1]*len(DataSet[lb1]) + [lb2]*len(DataSet[lb2]) + [lb3]*len(DataSet[lb3])
+    log.write('building pickle for: ' + lb1 + ' ' + lb2)
+    Data = DataSet[lb1] + DataSet[lb2]
+    Label = [lb1]*len(DataSet[lb1]) + [lb2]*len(DataSet[lb2])
     
     testTraining = np.array(Data).astype(np.float)
+    # do normalization here
+    testTraining = np.apply_along_axis(normalization, 1, testTraining )
     testlabeling = np.array(Label)
     
     model = GaussianNB() 
     model.fit(testTraining,testlabeling)
 
-    with open('_' + lb1+'_'+lb2+'_'+lb3+'.pkl', 'wb') as tr:
+    with open('./normalizedmodel/_' + lb1+'_'+lb2+'.pkl', 'wb') as tr:
         pickle.dump(model, tr, pickle.HIGHEST_PROTOCOL)
+
+
 
