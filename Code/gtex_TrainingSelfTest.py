@@ -1,14 +1,9 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Oct 26 14:30:32 2017
-
-@author: Student
-"""
 
 from sklearn.naive_bayes import GaussianNB
 from scipy import stats
 import numpy as np
 import csv
+import pickle
 
 def __loadData(dataFile):
     data = []
@@ -20,6 +15,12 @@ def __loadData(dataFile):
 
             data.append(row)
     return data
+
+def normalization(sample):
+    """one sample pass in"""
+    sample = sample + 100
+    # 2^20 = 1048576
+    return np.log2(sample * 1048576/np.sum(sample))
 
 log = open('log_GETX_Training_Self_test_normalized.txt', 'w')
 
@@ -35,13 +36,17 @@ LabelList = __loadData('label.csv')
 #     log.write(str(data))
 
 testTraining = np.array(DataList).astype(np.float)
-testTraining = stats.threshold(testTraining, threshmin=100, threshmax=None, newval=1)
-testTraining = np.log(testTraining)
+#testTraining = stats.threshold(testTraining, threshmin=100, threshmax=None, newval=1)
+testTraining = np.a(normalization, 1, testTraining)
 
 testlabeling = np.array(LabelList)
 
 model = GaussianNB() 
 model.fit(testTraining,testlabeling)
+
+with open('gtex_Normalized_TrainingResult.pkl', 'wb') as tr:
+    pickle.dump(model, tr, pickle.HIGHEST_PROTOCOL)
+
 
 #log.write(model.predict(testTraining))
 results = model.predict(testTraining)
@@ -57,7 +62,7 @@ for result in results:
     reports.append(report)
     i = i + 1
     
-with open('reportAll.csv', 'w') as csvFile:
+with open('reportAll_normalized.csv', 'w') as csvFile:
     wr = csv.writer(csvFile)
     wr.writerow(reports)
 
