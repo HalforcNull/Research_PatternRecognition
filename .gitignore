@@ -91,3 +91,5 @@ ENV/
 .ropeproject
 *.h5
 Data/gtex/genes.bin
+*.csv
+*.csv
