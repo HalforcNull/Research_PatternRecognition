@@ -1,9 +1,15 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Nov 28 15:14:29 2017
+
+@author: runan.yao
+"""
+
 from sklearn.naive_bayes import GaussianNB
 import numpy as np
 import itertools
 import csv
 import pickle
-import psutil
 
 DataSet = {}
 
@@ -23,19 +29,9 @@ def normalization(sample):
     # 2^20 = 1048576
     return np.log2(sample * 1048576/np.sum(sample))
 
-def getMemoUsage():
-    return str(psutil.virtual_memory().percent)
-
-log = open('excludeOnelog.txt', 'w')
-log.write('Program Start \n')
-log.write('Memo usage: '+ getMemoUsage() +'\n')
-
-DataList = __loadData('gtex_data.csv')
-LabelList = __loadData('gtex_label.csv')
-
-log.write('File load Finished. \n')
-log.write('Memo usage: '+ getMemoUsage() +'\n')
-
+log = open('excludeOneTCGAlog.txt', 'w')
+DataList = __loadData('tcga_data.csv')
+LabelList = __loadData('tcga_label.csv')
 
 for i in range(0, 9662):
     lb = LabelList[i][0]
@@ -44,18 +40,14 @@ for i in range(0, 9662):
     else:
         DataSet[lb] = [DataList[i]]
 
-del DataList
-del LabelList
-
-log.write('Data Load Finished.\n')
-log.write('Memo usage: '+ getMemoUsage() +'\n')
+log.write('Data Load Finished.')
 
 labels = DataSet.keys()
 
 for i in range( 0, 10 ):
     l = labels[i]
     model = GaussianNB() 
-    log.write('Building pickle for: ' + l + ' excluded.' )
+    log.write('building pickle for: ' + l + ' excluded.' )
     Data = []
     Label = []
     for j in labels:
@@ -68,13 +60,7 @@ for i in range( 0, 10 ):
     testTraining = np.apply_along_axis(normalization, 1, testTraining )
     testlabeling = np.array(Label)
     model.fit(testTraining,testlabeling)
-    
-    log.write('Model: ' + l + ' training finished.\n')
-    log.write('Memo usage: '+ getMemoUsage() +'\n')
-    
-    with open('./normalizedmodel/gtex/excludeOne/'+l+'.pkl', 'wb') as tr:
+
+    with open('./normalizedmodel/tcga/excludeOne/'+l+'.pkl', 'wb') as tr:
         pickle.dump(model, tr, pickle.HIGHEST_PROTOCOL)
-    
-    log.write('pickel: ' + l + ' write done.\n')
-    log.write('Memo usage: '+ getMemoUsage() +'\n')
 

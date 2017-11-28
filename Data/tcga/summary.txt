@@ -1,0 +1,81 @@
+eye:
+Uveal Melanoma: 80
+
+cervix:
+Cervical Squamous Cell Carcinoma and Endocervical Adenocarcinoma: 309
+
+Brain:
+Brain Lower Grade Glioma: 532 ?pituitary?
+Glioblastoma Multiforme: 175
+
+Kidney:
+Pheochromocytoma and Paraganglioma: 187
+Kidney Renal Clear Cell Carcinoma: 616
+Kidney Chromophobe: 91
+Kidney Renal Papillary Cell Carcinoma: 323
+
+uterus: / fallopian
+Uterine Corpus Endometrial Carcinoma: 589
+Uterine Carcinosarcoma: 57
+
+skin:
+Head and Neck Squamous Cell Carcinoma: 548
+Mesothelioma: 87
+Skin Cutaneous Melanoma: 473
+
+Breast:
+Breast Invasive Carcinoma: 1246
+Thymoma: 122
+
+??:
+Cholangiocarcinoma: 45
+
+stomach:
+Stomach Adenocarcinoma: 453
+
+Colon:
+Colon Adenocarcinoma: 546
+
+pancreas:
+Pancreatic Adenocarcinoma: 183
+
+??:
+Acute Myeloid Leukemia: 126
+
+??:
+Lymphoid Neoplasm Diffuse Large B-cell Lymphoma: 48
+
+prostate:
+Prostate Adenocarcinoma: 558
+
+??:
+Rectum Adenocarcinoma: 177
+
+ovary:
+Ovarian Serous Cystadenocarcinoma: 430
+
+lung:
+Lung Adenocarcinoma: 601
+Lung Squamous Cell Carcinoma: 555
+
+liver:
+Liver Hepatocellular Carcinoma: 424
+
+esophagus:
+Esophageal Carcinoma: 198
+
+adrenal:
+Adrenocortical Carcinoma: 79
+
+testis:
+Testicular Germ Cell Tumors: 156
+
+thyroid:
+Thyroid Carcinoma: 572
+
+Sarcoma: 265
+The term “sarcoma” encompasses a broad family of rare cancers that can affect soft tissue or bone throughout the body, and sometimes both.
+https://cancergenome.nih.gov/cancersselected/Sarcoma
+
+
+Bladder Urothelial Carcinoma: 433
