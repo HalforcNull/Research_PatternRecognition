@@ -93,3 +93,4 @@ ENV/
 Data/gtex/genes.bin
 *.csv
 *.csv
+Data/tcga/tcga_cancertype.txt

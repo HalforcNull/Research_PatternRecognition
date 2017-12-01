@@ -10,17 +10,21 @@ import numpy as np
 import itertools
 import csv
 import pickle
+import datetime
 
 DataSet = {}
 
-def __loadData(dataFile):
+def __loadData(dataFile, isNumericData = False):
     data = []
     with open(dataFile, 'rt') as csvfile:
         datas = csv.reader(csvfile, delimiter = ',')
         for row in datas:
             if row is None or len(row) == 0:
                 continue
-            data.append(row)
+            if isNumericData:
+                data.append(map(float,row))
+            else:
+                data.append(row)        
     return data
 
 def normalization(sample):
@@ -29,8 +33,13 @@ def normalization(sample):
     # 2^20 = 1048576
     return np.log2(sample * 1048576/np.sum(sample))
 
-log = open('excludeOneTCGAlog.txt', 'w')
-DataList = __loadData('tcga_data.csv')
+log = open('excludeOneTCGAlog.txt', 'a')
+
+
+log.write('===============  ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+log.write('===============  New Log Start by ' + 'Except One')
+
+DataList = __loadData('tcga_data.csv', isNumericData = True)
 LabelList = __loadData('tcga_label.csv')
 
 for i in range(0, 9662):
@@ -44,8 +53,9 @@ log.write('Data Load Finished.')
 
 labels = DataSet.keys()
 
-for i in range( 0, 10 ):
-    l = labels[i]
+#for i in range( 0, 10 ):
+#    l = labels[i]
+for l in labels:
     model = GaussianNB() 
     log.write('building pickle for: ' + l + ' excluded.' )
     Data = []

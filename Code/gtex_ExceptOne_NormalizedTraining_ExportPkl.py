@@ -5,14 +5,17 @@ import csv
 import pickle
 import psutil
 
-def __loadData(dataFile):
+def __loadData(dataFile, isNumericData = False):
     data = []
     with open(dataFile, 'rt') as csvfile:
         datas = csv.reader(csvfile, delimiter = ',')
         for row in datas:
             if row is None or len(row) == 0:
                 continue
-            data.append(row)
+            if isNumericData:
+                data.append(map(float,row))
+            else:
+                data.append(row)        
     return data
 
 def normalization(sample):
@@ -26,9 +29,9 @@ def getMemoUsage():
 
 def fileLoad(log):
     DataSet = {}
-    DataList = __loadData('gtex_data.csv')
-    #LabelList = __loadData('gtex_label.csv')
-    LabelList = __loadData('label.csv')
+    DataList = __loadData('gtex_data.csv', isNumericData = 'True')
+    LabelList = __loadData('gtex_label.csv')
+    #LabelList = __loadData('label.csv')
     
     log.write('File load Finished. \n')
     log.write('Memo usage: '+ getMemoUsage() +'\n')
@@ -36,9 +39,9 @@ def fileLoad(log):
     
     for i in range(0, 9662):
         lb = LabelList[i][0]
-        if lb in ['small', 'minor', 'whole']:
+        #if lb in ['small', 'minor', 'whole']:
             # meaning less label are removed from the tests
-            continue
+        #    continue
     
         if lb in DataSet.keys():
             DataSet[lb].append(DataList[i])
@@ -66,8 +69,9 @@ log.write('Memo usage: '+ getMemoUsage() +'\n')
 
 labels = DataSet.keys()
 
-for i in range( 0, 10 ):
-    l = labels[i]
+#for i in range( 21, 40 ):
+#    l = labels[i]
+for l in labels:
     model = GaussianNB() 
     log.write('Building pickle for: ' + l + ' excluded.' )
     Data = []
