@@ -49,7 +49,7 @@ def fileLoad(log):
             DataSet[lb] = [DataList[i]]
     log.write('Data Load Finished.\n')
     log.write('Memo usage: '+ getMemoUsage() +'\n')
-    return DataSet;
+    return DataSet
 
 log = open('excludeOnelog.txt', 'w')
 log.write('Program Start \n')
