@@ -16,8 +16,8 @@ def __loadData(dataFile):
         datas = csv.reader(csvfile, delimiter = ',')
         i = 0
         for row in datas:
-            if i > 1000:
-                break
+            # if i > 1000:
+            #     break
             if row is None or len(row) == 0:
                 continue
             i += 1
@@ -61,7 +61,7 @@ def main():
     logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
     log = logging.getLogger()
     fh = logging.FileHandler('bi_prediction_success_test.log')
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     fh.setFormatter = formatter
     log.addHandler(fh)
     #if not log.handlers:
@@ -87,8 +87,8 @@ def main():
         if i%100 == 0:
             log.info('Already test:' + str(i) + ' samples')
         #sortedResult = sorted(predictWithFeq(data).iteritems(), key = lambda (k,v): v, reverse = True)
+        j = 0
         for key, value in sorted(predictWithFeq(data).iteritems(), key = lambda (k,v): v, reverse = True):
-            j = 0
             if  j > 3:
                 fail += 1
                 result.append(0)
@@ -96,7 +96,8 @@ def main():
             if trueLabel in key:
                 success += 1
                 result.append(value)
-                continue
+                break
+            j += 1
         i += 1
 
     log.info('start writing result')            
