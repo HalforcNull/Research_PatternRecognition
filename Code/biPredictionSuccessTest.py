@@ -3,6 +3,8 @@ import numpy as np
 import itertools
 import csv
 import pickle
+import logging
+import sys
 from os import listdir
 from os.path import isfile, join
 
@@ -28,7 +30,6 @@ def normalization(sample):
     # 2^20 = 1048576
     return np.log2(sample * 1048576/np.sum(sample))
 
-
 def loadModels():
     BiClassificationModules = []
     for f in listdir('./normalizedmodel/'):
@@ -37,7 +38,6 @@ def loadModels():
             newPkl = pickle.load(open(fullf, 'rb'))
             BiClassificationModules.append(newPkl)    
     return BiClassificationModules
-
 
 def RunForBiPerdiction(models, normalizedData):
     result = []
@@ -57,44 +57,51 @@ def predictWithFeq(datalist):
             result[r] = 1
     return result
 
+def main():
+    log = logging.getLogger()
+    log.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
+    log.addHandler(logging.FileHandler('bi_prediction_success_test.log'))
+    log.addHandler(logging.StreamHandler(sys.stdout))
+    
+    DataList = __loadData('gtex_data.csv')
+    log.info('read data. len: ' + str(len(DataList)))
+    LabelList = __loadData('label.csv')
+    log.info('read label. len: ' + str(len(LabelList)))
 
-log = open('log_BioPredictSuccess.txt', 'w')
+    testData = np.array(DataList).astype(np.float)
+    log.info('data in test Data: ' + len(testData))
 
-DataList = __loadData('gtex_data.csv')
-log.write('read data: len: ' + str(len(DataList)))
-LabelList = __loadData('label.csv')
-
-
-testData = np.array(DataList).astype(np.float)
-
-success = 0
-fail = 0
-result = []
-for data in testData:
-    i = 0
-    #result = []
-    trueLabel = LabelList[i][0]
-    #result.append(trueLabel)
-    for key, value in sorted(predictWithFeq(data).iteritems(), key = lambda (k,v): (v,k), reverse = True):
-        #print('key: '+key)
-        #print('value: ' +str(value))
-        if i > 3:
-            fail += 1
-            result.append(0)
-            break;
-    #    result.append([key, value])
-        if key in trueLabel:
-            success += 1
-            result.append(value)
-            break;
+    success = 0
+    fail = 0
+    result = []
+    for i in range(len(testData)):
+        data = testData[i]
+        trueLabel = LabelList[i][0]
+        log.info('cross check data: '+ str(i))
+        log.info('true label: ' + trueLabel)
+        
+        #sortedResult = sorted(predictWithFeq(data).iteritems(), key = lambda (k,v): v, reverse = True)
+        for key, value in sorted(predictWithFeq(data).iteritems(), key = lambda (k,v): v, reverse = True):
+            j = 0
+            if  j > 3:
+                fail += 1
+                result.append(0)
+                break
+            if trueLabel in key:
+                success += 1
+                result.append(value)
+                continue
         i += 1
-            
-with open('bioTestResult.csv', 'w') as csvFile:
-    wr = csv.writer(csvFile)
-    wr.writerow(result)
 
-log.write('success: ' + str(success))    
-log.write('fail: ' + str(fail))
+    log.info('start writing result')            
+    with open('bioTestResult.csv', 'w') as csvFile:
+        wr = csv.writer(csvFile)
+        wr.writerow(result)
+    log.info('all info write into data. lenth:' + len(result))
+
+    log.info('success: ' + str(success))    
+    log.info('fail: ' + str(fail))
 
 
-
+if __name__ == '__main__':
+    main()
