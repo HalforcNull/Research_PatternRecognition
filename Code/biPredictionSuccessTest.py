@@ -58,8 +58,8 @@ def predictWithFeq(datalist):
     return result
 
 def main():
+    logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
     log = logging.getLogger()
-    log.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
     log.addHandler(logging.FileHandler('bi_prediction_success_test.log'))
     log.addHandler(logging.StreamHandler(sys.stdout))
     
