@@ -60,16 +60,21 @@ def predictWithFeq(datalist):
 def main():
     logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
     log = logging.getLogger()
-    log.addHandler(logging.FileHandler('bi_prediction_success_test.log'))
-    log.addHandler(logging.StreamHandler(sys.stdout))
+    fh = logging.FileHandler('bi_prediction_success_test.log')
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    fh.setFormatter = formatter
+    log.addHandler(fh)
+    #if not log.handlers:
+    #    log.addHandler(logging.StreamHandler(sys.stdout))
     
+    log.critical('Program Start')
     DataList = __loadData('gtex_data.csv')
     log.info('read data. len: ' + str(len(DataList)))
     LabelList = __loadData('label.csv')
     log.info('read label. len: ' + str(len(LabelList)))
 
     testData = np.array(DataList).astype(np.float)
-    log.info('data in test Data: ' + len(testData))
+    log.info('data in test Data: ' + str(len(testData)))
 
     success = 0
     fail = 0
@@ -77,9 +82,10 @@ def main():
     for i in range(len(testData)):
         data = testData[i]
         trueLabel = LabelList[i][0]
-        log.info('cross check data: '+ str(i))
-        log.info('true label: ' + trueLabel)
-        
+    #    log.info('cross check data: '+ str(i))
+    #    log.info('true label: ' + trueLabel)
+        if i%100 == 0:
+            log.info('Already test:' + str(i) + ' samples')
         #sortedResult = sorted(predictWithFeq(data).iteritems(), key = lambda (k,v): v, reverse = True)
         for key, value in sorted(predictWithFeq(data).iteritems(), key = lambda (k,v): v, reverse = True):
             j = 0
@@ -97,7 +103,7 @@ def main():
     with open('bioTestResult.csv', 'w') as csvFile:
         wr = csv.writer(csvFile)
         wr.writerow(result)
-    log.info('all info write into data. lenth:' + len(result))
+    log.info('all info write into data. lenth:' + str(len(result)))
 
     log.info('success: ' + str(success))    
     log.info('fail: ' + str(fail))
