@@ -5,6 +5,7 @@ import csv
 import pickle
 import logging
 import sys
+import json
 from os import listdir
 from os.path import isfile, join
 
@@ -34,7 +35,7 @@ def loadModels():
     BiClassificationModules = []
     GTEXModuleFolder = '/home/yaor/research/normalizedmodel/gtex/excludeOne'
     TCGAModuleFolder = '/home/yaor/research/normalizedmodel/tcga/excludeOne'
-    ModuleFolder = GTEXModuleFolder
+    ModuleFolder = TCGAModuleFolder
     for f in listdir(ModuleFolder):
         fullf = join(ModuleFolder,f)
         if isfile(fullf) and f.rsplit('.', 1)[1].lower() == 'pkl':
@@ -81,33 +82,26 @@ def main():
 
     success = 0
     fail = 0
-    result = []
+    result = {}
     for i in range(len(testData)):
         data = testData[i]
         trueLabel = LabelList[i][0]
         if i%100 == 0:
             log.info('Already test:' + str(i) + ' samples')
-        j = 0
+        if not trueLabel in result.keys():
+            result[trueLabel] = {}
         for key, value in sorted(predictWithFeq(data).iteritems(), key = lambda (k,v): v, reverse = True):
-            if  j > 3:
-                result.append(0)
-                break
-            if trueLabel in key:
-                success += 1
-                result.append(value)
-                break
-            j += 1
+            if key in result[trueLabel].keys():
+                result[trueLabel][key] += 1
+            else:
+                result[trueLabel][key] = 1
+            break
         i += 1
 
-    fail = len(testData) - success
     log.info('start writing result')            
-    with open('bioTestResult.csv', 'w') as csvFile:
-        wr = csv.writer(csvFile)
-        wr.writerow(result)
-    log.info('all info write into data. lenth:' + str(len(result)))
-
-    log.info('success: ' + str(success))    
-    log.info('fail: ' + str(fail))
+    with open('bioTestResult_GETXdata_TCGAmodel.csv', 'w') as outputFile:
+        json.dump(result, outputFile)
+    log.info('all info write into data.')
 
 
 if __name__ == '__main__':
