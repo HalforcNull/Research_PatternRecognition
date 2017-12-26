@@ -17,8 +17,9 @@ def __loadData(dataFile):
         datas = csv.reader(csvfile, delimiter = ',')
         i = 0
         for row in datas:
-            if i > 4000:
-                break
+            if i <= 4000:
+                i += 1
+                continue
             if row is None or len(row) == 0:
                 continue
             i += 1
@@ -99,11 +100,14 @@ def main():
         i += 1
 
     log.info('start writing result')            
-    with open('bioTestResult_GETXdata_TCGAmodel.csv', 'w') as outputFile:
+    with open('bioTestResult_GETXdata_TCGAmodel2.csv', 'w') as outputFile:
         json.dump(result, outputFile)
     log.info('all info write into data.')
-    with open('./data/testR_GTEXDataVSTCGAModel_1.pkl', 'wb') as tr:
+    with open('./data/testR_GTEXDataVSTCGAModel_2.pkl', 'wb') as tr:
         pickle.dump(result, tr, pickle.HIGHEST_PROTOCOL)
+
+    
+
 
 if __name__ == '__main__':
     main()
