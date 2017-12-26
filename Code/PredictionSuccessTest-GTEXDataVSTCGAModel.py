@@ -34,7 +34,7 @@ def normalization(sample):
 def loadModels():
     BiClassificationModules = []
     GTEXModuleFolder = '/home/yaor/research/normalizedmodel/gtex/excludeOne'
-    TCGAModuleFolder = '/home/yaor/research/normalizedmodel/tcga/excludeOne'
+    TCGAModuleFolder = '/home/yaor/research/normalizedmodel/tcga/excludeOne/NoSarcoma'
     ModuleFolder = TCGAModuleFolder
     for f in listdir(ModuleFolder):
         fullf = join(ModuleFolder,f)
