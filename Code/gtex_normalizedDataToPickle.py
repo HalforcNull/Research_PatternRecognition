@@ -25,7 +25,7 @@ def __loadData(dataFile, isNumericData = False):
 
 def fileLoad():
     DataSet = {}
-    DataList = __loadData('gtex_data.csv', isNumericData = 'True')
+    DataList = __loadData('gtex_data.csv', isNumericData = True)
     LabelList = __loadData('gtex_label.csv')
     #LabelList = __loadData('label.csv')
     

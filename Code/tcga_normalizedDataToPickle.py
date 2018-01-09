@@ -26,7 +26,7 @@ def __loadData(dataFile, isNumericData = False):
 
 def fileLoad():
     DataSet = {}
-    DataList = __loadData('tcga_data.csv', isNumericData = 'True')
+    DataList = __loadData('tcga_data.csv', isNumericData = True)
     LabelList = __loadData('tcga_label.csv')
     #LabelList = __loadData('label.csv')
     
