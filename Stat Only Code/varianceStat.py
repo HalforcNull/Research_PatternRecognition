@@ -50,11 +50,18 @@ def topGeneCalc( name ,dataF, labelF, opDataF, logSys):
     s = np.argsort(myr)                                 # sort and get the index
     s = s[::-1]
 
-    myr[s[120]]                                         # gtex, 120 gene is enough to 
-    logSys.write( 'top 120 of ' + name + ' is: ' + str(s[120]))
+    #myr[s[120]]                                         # gtex, 120 gene is enough to 
+    logSys.write( 'top 120 of ' + name + ' is: ' + str(s[1:120]))
+    logSys.write( 'the last one is: ' + str(myr[s[120]])) 
+    return s[1:120]
 
 
 log = open('consoleTest.txt', 'a')
-topGeneCalc('gtex', 'gtex_data.csv', 'gtex_label.csv', 'gtex.detailed.result.csv', log)
-topGeneCalc('tcga', 'tcga_data.csv', 'tcga_label.csv', 'tcga.detailed.result.csv', log)
+gtex = topGeneCalc('gtex', 'gtex_data.csv', 'gtex_label.csv', 'gtex.detailed.result.csv', log)
+tcga = topGeneCalc('tcga', 'tcga_data.csv', 'tcga_label.csv', 'tcga.detailed.result.csv', log)
 
+BothGtexTcga = set(gtex) & set(tcga)
+EitherGtexTcga = set(gtex) | set(tcga)
+
+log.write( str(len(BothGtexTcga)) + ' genes in both, they are: ' + str(BothGtexTcga))
+log.write( str(len(EitherGtexTcga)) + ' genes in either, they are: ' + str(EitherGtexTcga))
