@@ -38,7 +38,6 @@ def topGeneCalc( name ,dataF, labelF, opDataF, logSys):
             LabelCount[lb] = 0
 
     logSys.write('Data Load Finished.')
-    logSys.write(str(LabelCount))
     myvar = np.var(DataS, axis = 0)
     myav = np.mean(DataS, axis = 0)
     myavsq = np.multiply(myav, myav)
