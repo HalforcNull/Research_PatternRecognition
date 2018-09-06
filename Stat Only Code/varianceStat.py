@@ -2,6 +2,8 @@ import numpy as np
 import itertools
 import csv
 import datetime
+from os import listdir
+from os.path import isfile, isdir, join
 
 DataSet = {}
 
@@ -67,10 +69,10 @@ def topGeneCalc( name ,dataF, labelF, opDataF, procType, logSys):
     if procType == 1:
         return outputDataS("orginal " + name, DataS, logSys)       # original
     elif procType == 2:                 
-        DS = np.array(DataSet).astype(np.float)      #np array
+        DS = np.array(DataSet)     #np array
         return outputDataS("np array" + name, DS, logSys)
     else:
-        DS = np.array(DataSet).astype(np.float)
+        DS = np.array(DataSet)
         return outputDataS("normalized" + name, DS, normalization(DS))
     
 
@@ -101,3 +103,35 @@ log.write( str(len(BothTcga)) + ' genes in all tcga, they are: ' + str(BothTcga)
 # log.write( str(len(BothGtexTcga)) + ' genes in both, they are: ' + str(BothGtexTcga))
 # log.write( '\r\n' )
 # log.write( str(len(EitherGtexTcga)) + ' genes in either, they are: ' + str(EitherGtexTcga))
+
+log.write('===============  ' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+log.write('===============  New Log Start by ' + 'cell line')
+
+dataFolder = '/home/yaor/research/human_matrix_cell_line/'
+tumorList = listdir(dataFolder)
+DataSet = []
+LabelCount = {}
+sampleCount = 0
+for t in tumorList:
+    if not isdir(t): 
+        log.write(t + ' is not a folder.')
+    subList = listdir(join(dataFolder, t))
+    for f in subList:
+        LabelCount[t+'.'+f] = 0
+        fullFile = join(dataFolder, t, f)
+        if isfile(fullFile) and f.rsplit('.', 1)[1].lower() == 'csv':            
+            lb = t + '.' + f.replace('_expression_matrix.csv', '')
+            with open(fullFile, 'rt') as csvfile:
+                datas = csv.reader(csvfile, delimiter = '\t')
+                sampleCount = 0
+                for row in datas:
+                    if row is None or len(row) == 0:
+                        continue
+                    if sampleCount >= 70:
+                        break
+                    r = map(float,row[0].replace('\'', '').split(','))
+                    log.write(str(r))
+                    DataSet.append(r)
+                    sampleCount = sampleCount + 1 # we don't want count empty lines into samples
+                LabelCount[t+'.'+f] = sampleCount
+            
